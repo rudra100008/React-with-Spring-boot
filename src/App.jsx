@@ -8,10 +8,13 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import UpdateCourse from "./Components/UpdateCourse";
 
 function App() {
   return (
     <div className="bg-gradient-to-r from-violet-500 to-fuchsia-500 min-h-screen">
+      <ToastContainer/>
       <Router>
         <Container>
           <h1 className="mx-auto p-3 shadow-lg rounded-lg bg-green-300 text-center">
@@ -23,8 +26,9 @@ function App() {
             </Col>
             <Col md={10}>
               <Routes>
-                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/addCourse" element={<AddCourse />} />
+                <Route path="/update/:id" element={<UpdateCourse/>} />
                 <Route path="/allCourses" element={<AllCourses />} />
               </Routes>
             </Col>

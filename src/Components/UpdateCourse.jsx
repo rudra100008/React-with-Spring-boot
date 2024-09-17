@@ -1,42 +1,45 @@
-import axios from "axios";
-import { Fragment, useEffect,useState } from "react"
 import { Button, Form,FormGroup, Input } from "reactstrap"
-import base_url from "../api/bootapi";
-import { toast } from "react-toastify";
-
-export default function AddCourse() {
-    useEffect(()=>{
-        document.title="Add courses";
-    },[])
-    const [course, setcourse] = useState({
+import { Fragment, useState} from "react"
+import axios from "axios"
+import base_url from "../api/bootapi"
+import { useNavigate, useParams } from "react-router-dom"
+import { toast } from "react-toastify"
+export default function UpdateCourse()
+{
+    const {id}=useParams();
+    const Navigate=useNavigate();
+    const [course,setcourse]=useState({
         courseTitle:"",
         description:""
-    });
-    const clearData=()=>{setcourse({
-        courseTitle:"",
-        description:""
-    }) }
-    const postCourseToServer=(data)=>{
-        axios.post(`${base_url}/courses`,data).then(
+    })
+    const putCourseFromServer=()=>{
+        // eslint-disable-next-line react/prop-types
+        axios.put(`${base_url}/courses/${id}`,course).then(
             (response)=>{
-                toast.success("Course added Successfully")
-                setcourse({id:"",courseTitle:"",description:""})//clear the form after submission
-                console.log(response.data)
+                console.log(response.data);
+                toast.success("Course updated Successfully")
+                Navigate("/")
             },
             (error)=>{
-                console.log(error)
-                toast.error("Failed to add course")
+                console.log(error);
+                toast.error("Failed to update course")
             }
         )
     }
-    const handleSubmit=(e)=>{
-        e.preventDefault()
-        postCourseToServer(course);
+    const handleUpdate=(e)=>{
+        e.preventDefault();
+        putCourseFromServer();
+    }
+    const clearData=()=>{
+        setcourse({
+            courseTitle:"",
+            description:""
+        })
     }
     return (
         <Fragment>
-            <h1 className="text-center font-bold text-green-400">Fill the course Details:</h1>
-            <Form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-xl rounded-xl p-8 "> 
+            <h1 className="text-center font-bold text-green-400">Update Course:</h1>
+            <Form onSubmit={handleUpdate} className="max-w-2xl mx-auto bg-white shadow-xl rounded-xl p-8 "> 
             <FormGroup className="px-7  ">
                 <label htmlFor="title" className="block font-semibold m-1 text-xl text-gray-500">Course Title: </label>
                 <Input 
@@ -59,7 +62,7 @@ export default function AddCourse() {
                 className="h-20"/>
             </FormGroup>
             <div className="ml-7 flex justify-between mr-5 ">
-            <Button type="submit" color="success" className="text-white font-semibold transition-transform duration-300 hover:scale-105">Add Course</Button>
+            <Button type="submit" color="success" className="text-white font-semibold transition-transform duration-300 hover:scale-105">Update Course</Button>
             <Button color="warning" onClick={clearData} className="text-white font-semibold transition-transform duration-300 hover:scale-105">Clear</Button>
             </div>
         </Form>
